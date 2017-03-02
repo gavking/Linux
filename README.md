@@ -1,2 +1,2 @@
 # Linux
-All things Linux related
+My notes on performing tasks in Linux

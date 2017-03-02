@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+<head>
+  <title>Linux - Sys Admin</title>
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+<center><h1>System Administation</h1></center>
+
+<div class="row">
+
+    <div class="col-sm-3">
+    <ul class="list-group">
+    <li class="list-group-item"><a href="../index.html">Home</a><br></li>
+    </ul>
+    </div>
+
+  <div class="col-sm-9">
+    <hr>
+    <h2>Display Kernel Version</h2>
+    <code>uname -a</code> Shows all info<br>
+    <code>uname -v</code> Shows version only<br>
+    <code>uname -r</code> Shows release only<br>
+
+    <hr>
+    <h2>Find system IP Address</h2>
+    <code>ifconfig</code> Shows info for all interfaces- replaced by "ip"<br>
+    <code>ip addr show</code> Shows info for all interfaces<br>
+    <code>ip addr show eth0</code> Shows info for interface eth0<br>
+
+    <hr>
+    <h2>Checking Disk Space</h2>
+    <code>df -ah</code> Disk Free Shows all filesystems in human readable form<br>
+    <code>du -sh</code> Disk Usage - can specify a directory<br>
+
+    <hr>
+    <h2>Managing services</h2>
+    <h3>SYSTEMCTL</h3>
+    <p> Used to manage the Systemd services management system
+    <code>systemctl</code> Lists all running services and their status
+    <code>systemctl status service_name</code><br>
+    </p>
+    <h3>SERVICE (on older systems)</h3>
+    <p>
+    <code>service servine_name command</code><br>
+    </p>
+
+    <hr>
+    <h2>Checking for files with "777" permissions</h2>
+    <p>Use find with the -perm option to check for any files where everyone has read, write, execute permissions
+    <br><br><code>sudo find / -type f -perm 0777</code>
+    </p>
+
+    <hr>
+    <h2>Finding files by filesize</h2>
+    <p>Use the -size option
+    <br><code>sudo find / -type f -size 1M</code> find files of exactly 1MB<br>
+    <br><code>sudo find / -type f -size +5M</code> find files >5MB<br>
+    <br><code>sudo find / -type f -size +1k</code> find files >1KB<br>
+    <br><code>sudo find / -type f -size -1k</code> find files <1KB<br>
+    </p>
+
+    <hr>
+    <h2>List files and order by size</h2>
+    <p>Use the -S option
+    <br><code>ls -lS</code> Long list of files in descending size<br>
+    </p>
+
+    <hr>
+    <h2>Compress Files</h2>
+    <h3>GZIP</h3>
+    <p>
+    <br><code>gzip file.txt</code> compress file.txt<br>
+    </p>
+
+    <hr>
+    <h2>Combine FIND and GREP</h2>
+    <p>
+    <br><code>sudo find . -type f -iname "*.txt" -exec grep -i "text" {} +</code> find .txt files that contain "text"
+    <br><code>sudo find . -type f -iname "*.txt" -exec grep -i "text" {} + > output.txt;</code> outputs to file
+    <br><code>sudo find . -type f -iname "*.txt" -exec grep -i "text" {} + | tee output.txt;</code> outputs to console and file
+    </p>
+
+        <hr>
+        <h2>Manage Processes</h2>
+        <h3>WHATIS</h3>
+        <p>Returns the Man page description for a command or process
+        <br><code>whatis sshd</code> displays man description for sshd
+        <br><code>whatis whatis</code> displays man description for whatis<br>
+        </p>
+        <h3>pwdx</h3>
+        <p>Lists the current working directory for a process
+        <br><code>pwdx PID</code> Displays details about process with specified PID<br>
+        </p>
+        <h3>PS</h3>
+        <code>ps aux</code> List processes<br>
+        <code>ps aux | grep keyword</code> Search output from ps aux for keyword<br>
+        <h3>TOP</H3>
+        <code>top</code> Live list of processes and system usage<br>
+        <h3>HTOP</H3>
+        <code>htop</code> Much fancier version of TOP - not installed by default<br>
+        <h3>ls -l /proc/PID/exe</h3>
+        <p>Lists the executable associated with a PID
+        <br><code>ls -l /proc/2063/exe</code> Displays details about PID 2063<br>
+        <h3>PGREP</H3>
+        <p>Search process that match criteria
+        <code>pgrep -u root sshd</code> Will find processes belonging to root and called sshd<br>
+        <h3>PKILL</H3>
+        <p>Kill processes
+        <code>pkill -KILL -u username</code> Kill process associated with user<br>
+        <h3>FREE</H3>
+        <code>free -h</code> Lists memory usage in human readable format<br>
+
+    <hr>
+    <h2>Managing Ports</h2>
+    <h3>LSOF</h3>
+    <p>
+    <br><code>sudo lsof -l</code> list open ports and process that owns them<br>
+    <br><code>sudo lsof -i :22</code> list processes bound to port 22<br>
+    </p>
+    <h3>NETSTAT -tuplna</h3>
+    <p>Lists process and the sockets/ports associated with them
+    <br><code>sudo netstat -tuplna</code> list of processes and ports - by default it only shows servers so included -a option<br>
+    </p>
+
+    <hr>
+    <h2>Mounting Partitions/Drives</h2>
+    <h3>MOUNT</h3>
+    <p> Partitions can be added to the /mnt directory
+    <br><code>ls /mnt</code> lists the contents of the mount point<br>
+    <br><code>mount</code> list existing mounts<br>
+    <br><code>mount /dev/sda2 /mnt</code> mount the device sda2 at /mnt<br>
+    <br><code>/etc/fstab</code> edit this file to add mounts that should be done at startup<br>
+    </p>
+
+    <hr>
+    <h2>Scheduling Jobs</h2>
+    <h3>CRON</h3>
+    <p>Use the CRON Table which is in /etc/crontab. Format to use is listed in file.
+    <br><code>crontab -e</code> Edit the file to add jobs for current user. <br>
+    <br><code>sudo crontab -e</code> Edit the file to add jobs for root user<br>
+    <br><code>15 16 * * * ls > /home/gavin/crontabres.txt</code> Runs ls at 16:15 every day, every month and outputs to crontabres.txt<br>
+    <br><code>0 17 * * 1 tar -zcf /var/backups/home.tgz /home/</code> Takes backup of home directories for all users at 5pm every Monday<br>
+    <br><code>0 7 * * 5 yum update -y</code> Updates system at 7am every Friday<br>
+    </p>
+
+    <hr>
+    <h2>Managing Users</h2>
+    <h3>USERADD</h3>
+    <p>Creates new user accounts - locked by default
+    <br><code>sudo useradd username</code> Create user account with username<br>
+    <h3>PASSWD</h3>
+    <p>Provide a password for the new account to unlock it
+    <br><code>sudo passwd username</code> Create a password for username<br>
+    <h3>Adding Users to groups</h3>
+    <p>
+    <br><code>sudo gpasswd -a username group</code> Adds user to group<br>
+    <h3>Adding Users to SUDOERS / WHEEL group</h3>
+    <p>
+    <br><code>sudo gpasswd -a username wheel</code> Adds user to wheel group<br>
+    <h3>List all Users in SUDOERS / WHEEL group</h3>
+    <p>
+    <br><code>sudo lid -g wheel</code> All users in wheel group<br>
+    <h3>List USERS</h3>
+    <p>List users currently logged in</P>
+    <br><code>users</code><br>
+    <h3>List ALL USERS</h3>
+    <p>List all user accounts
+    <br><code>cat /etc/passwd</code>
+    <br><code>cut -d: -f1 /etc/passwd</code><br> Gives only the usernames
+    <h3>Delete USERS</h3>
+    <p>Delete user accounts
+    <br><code>sudo userdel username</code> Delete user but leave home directory
+    <br><code>sudo userdel -r username</code> Delete user and home directory
+    </p>
+
+    <hr>
+    <h2>Managing System/Package Updates</h2>
+    <p>All Yum activity is logged here: </P>
+    <code>cat /var/log/yum.log</code> Shows all Yum activity including installs and updates<br>
+    <p>Setup a Cron Job to do auto-updates</P>
+    <code>crontab -e</code> Edit the Cron table and add "yum update -y" command, see Sheduling Jobs above<br>
+
+  </div>
+</div>
+
+</div>
+  <!-- Latest compiled and minified JavaScript for Bootstrap -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+
+<footer>
+</footer>
+
+</html>

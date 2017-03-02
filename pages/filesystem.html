@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+<head>
+  <title>Linux-Filesystem</title>
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+<center><h1>Linux Filesystem</h1></center>
+
+<div class="row">
+  <div class="col-sm-3">
+    <ul class="list-group">
+    <li class="list-group-item"><a href="./index.html">Home</a><br></li>
+    </ul>
+  </div>
+
+  <div class="col-sm-9">
+    <hr>
+    <h2>Listing and Interpreting Permissions</h2>
+    <p>Run an "ls -l" to see the permissions for files and folders in directory.
+      An example output would be:
+    <br><br><code>-rwxrwxr-x 1 root root 4946 Nov 25 16:34 file.txt</code>
+    <br><code>drwxr-xr-x 3 root root 1018 Jan 17 12:15 downloads</code><br><br>
+    Starting from the left, we read this as:<br>
+    The first character indicates whether it is a file, "-", or a directory, "d".
+    The first example is a file whilst the second is a directory.<br>
+    The next nine characters (three groups of three) are the read, write and
+    execute permissions for the owner of the file/directory,
+    the group, and other (i.e. everyone else).<br>
+    The next elements are: the number of links to object, the owner, the group, the ID, the date,
+    and finally the name of the file/folder.
+    </p>
+    <p>So in the first example, we have a file, "-", where the owner has "rwx" permissions,
+    so read, write, execute, the group also has "rwx" permissions, and everyone
+    else has "r-x" or read, and execute permissions but not write.There is "1" link <tbody>
+    the file. The file belongs to "root", and the "root" group, its ID is 4946, the date and
+    time the file was last touched was Nov 25 16:34, and the name of the file/folder.
+   </tbody></p>
+    <hr>
+    <h2>Changing Permissions - CHMOD</h2>
+    <p>
+      Use the "chmod" command. This can be combined with octal or symbolic notation
+      to specify the permissions.
+      <p><strong>Octal Notation</strong></p>
+      <code>chmod 756 myfile</code>
+      <p>Here the digits 7, 5, and 6 each individually represent the permissions for the user,
+        group, and others, in that order. Each digit is a combination of the numbers 4, 2, 1, and 0,
+        which can be combined to give 5, 6, and 7:
+      </p>
+      <ul>
+        <li>4 - "read"</li>
+        <li>2 - "write"</li>
+        <li>1 - "execute"</li>
+        <li>0 - "no permission"</li>
+        <li>5 - 4+0+1 - "read, no write, execute"</li>
+        <li>6 - 4+2+0 - "read, write, no execute"</li>
+        <li>7 - 4+2+1 - "read, write, execute"</li>
+      </ul>
+      <p>In the example above, 756 corresponds to rwxr-xrw-.
+
+      <p><strong>Symbolic notation</strong></p>
+      <code>chmod u=rwx,g=rx,o=r myfile</code>
+      <p>The notation is pretty self explanatory and would correspond to 'chmod 754 myfile' in Octal notation.</p>
+    </p>
+
+    <hr>
+    <h2>Changing Ownership - CHOWN</h2>
+    <p>
+      Use the "chown" command.
+    </p>
+
+    <hr>
+    <h2>Search for files - FIND</h2>
+    <p>
+      Use the "find" command.
+      <br><code>find . -type f -name "*.txt"</code><br>
+      The above does a find in the current directory, ".", for file type, "-type f",
+      with an extension of .txt, "*.txt". The "-name" option mean use case-sensitivity
+      so it will only find ".txt" files. Use "-iname" to remove the case sensitivity,
+      so will find ".TXT" as well.
+      <br><code>find . -type f -iname "file*"</code><br>
+      This will find any files that being with "file" or "FILE".
+    </p>
+
+    <hr>
+    <h2>Managing storage devices / partitions / filesystems</h2>
+    <p>Unlike Windows where all devices get a drive letter, Linux mounts everything under root (i.e. "/").
+    System devices that are managed by the kernel are mounted under /dev, you ordinarily don't need to change anything
+    in here. New devices can be mounted in /mnt or /media.</p>
+    <h3>MOUNT / UMOUNT</h3>
+    <p>Mount additional devices.</p>
+    <h3>FDISK</h3>
+    <p>Manipulate the partition tables. Can also list the paritions <code>fdisk -l</code> WARNING fdisk can "f" your disks!</p>
+    <h3>MKFS</h3>
+    <p>Format a partition with a filesystem e.g. ext4</p>
+    <h3>FSCK</h3>
+    <p>Run checks on the filesystem on a partition</p>
+
+    <hr>
+    <h2>Essential Commands</h2>
+    <table class="table">
+      <tr><th>Command</th><th>Effect</th><th>Options</th></tr>
+      <tr><td>ls -l</td><td>List including permissions</td><td>"path" list contents of path<br>"-r" list in reverse order</td></tr>
+      <tr><td>du</td><td>list disk usage<br>du -d 1<br>Shows usage for one level below pwd</td> "-d" - control level<td></td></tr>
+      <tr><td>tree</td><td>list filesytem as a tree</td><td></td></tr>
+      <tr><td>chmod</td><td>change permissions<br>Can prepend with "sudo"</td><td>"-R" - recrusively change all files in folder</td></tr>
+      <tr><td>chown</td><td>change ownership of file/folder<br>e.g. chown root:gavin file.txt<br>file.txt is now owned by root and the gavin group</td><td>"-R" - recrusively change all files in folder</td></tr>
+      <tr><td>mkdir myFolder</td><td>create directory called myFolder</td><td></td></tr>
+      <tr><td>cp</td><td>copy file or folder<br>cp -r /home/hope/files/* /home/hope/backup</td><td>"-r" - recursive for copying directories</td></tr>
+      <tr><td>mv -i</td><td>move or rename file or folder<br>mv file.txt /home/backup</td><td> "-i" checks if you are overwiting existing object</td></tr>
+      <tr><td>rm</td><td>remove file or folder</td><td>"-rf" - THIS OPTION COMBO IS VERY DANGEROUS!!</td></tr>
+      <tr><td>rmdir</td><td>remove directory<br>rmdir myDirectory</td><td></td></tr>
+      <tr><td>touch</td><td>create a file<br>touch myfile.txt</td><td></td></tr>
+      <tr><td>cat</td><td>display the contents of a file</td> "-vet" - displays hidden characters<td></td></tr>
+      <tr><td>more</td><td>scroll through contents of a file. Useful for long files.</td><td></td></tr>
+      <tr><td>find</td><td>search filesytem<br>find / -type f -name "file*.txt"<br>Start at root and find text files that start with "file"</td><td>"-iname" - ignore case<br>"-not" not like the search term</td></tr>
+      <tr><td>whereis</td><td>show path to item e.g. whereis ls<br>
+      <tr><td>grep</td><td>search contents<br>grep -i "string" ./*<br>Search all files in current dir for "string" and ignore case </td><td>"-n" - show line number</td></tr>
+      <tr><td>mount</td><td>mount a device</td><td></td></tr>
+      <tr><td>umount</td><td>unmount a device</td><td></td></tr>
+      <tr><td>fdisk</td><td>manage partitions</td><td></td></tr>
+      <tr><td>mkfs</td><td>manage filesystems on partitions</td><td></td></tr>
+      <tr><td>fsck</td><td>check the filesytem on partition</td><td></td></tr>
+    </table>
+
+  </div>
+</div>
+</div>

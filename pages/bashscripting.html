@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+  <title>Linux Cheat Sheets</title>
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+<center><h1>Bash Scripting</h1></center>
+
+<div class="row">
+  <div class="col-sm-3">
+    <ul class="list-group">
+    <li class="list-group-item"><a href="../index.html">Home</a><br></li>
+    </ul>
+  </div>
+
+  <div class="col-sm-9">
+    <hr>
+    <h2>Pipes</h2>
+    <p>Using |, you can send the output or input of commands</p>
+    <code>ls | more</code> Passes output of ls to more command<br>
+    <br>
+
+    <hr>
+    <h2>Redirects</h2>
+    <p>Using < and >, you can redirect the output or input of commands</p>
+    <code>ls > output.txt</code> Passes output of ls into file output.txt<br>
+    <code>cat < input.txt</code> Passes contents of input.txt into cat<br>
+    <code>cat < input.txt > output.txt</code> Combines both of the above<br>
+    <code>cat > input.txt</code> Allows you to write contents of file from terminal<br>
+    <h2>Appends</h2>
+    <p>Using << and >>, you can append to the output or input of commands</p>
+    <code>ls >> output.txt</code>
+    <br>
+
+    <hr>
+    <h2>STDOUT STDIN STDERR</h2>
+    <p>STDIN (0) is the output stream to the terminal, STDOUT (1) is the input stream to the terminal, STDERR (2) is the Error stream
+    They are referred to by number 0,1 and 2 respectively</p>
+    <code>ls -R / 2>errors.txt 1>output.txt</code> Recursively list items from Root and send any errors to errors.txt, and other
+    otput to output.txt<br>
+    <p>Can be combined with Pipes</p>
+
+  </div>
+
+</div>
+  <!-- Latest compiled and minified JavaScript for Bootstrap -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+
+<footer>
+</footer>
+
+</html>

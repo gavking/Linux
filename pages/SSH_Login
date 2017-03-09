@@ -1,0 +1,108 @@
+## Password-less logins using SSH keys
+
+Instructions on how to connect from a workstation to a server using SSH keys, removing the need to provide
+a password. This is recommended for increased security since a password can be brute forced whereas RSA Keys
+cannot.
+
+1. Generate the Private/Public Key pair on the Workstation
+
+`ssh-keygen` - generates the public/private key pair. You will need to select a file location to store the key and 
+a passphrase that is required when you first use the key. If keys already exist you may be asked to overwrite them,
+which you should choose to do as they are useless if you don't know the passphrase. Depending on the system the keys
+may be DSA rather than RSA, but either is ok and nothing below should be different other than the names.
+
+This creates two files:
+
+`~/.ssh/id_rsa`    - the private key which stays on your workstation
+`~/.ssh/is_rsa.pub`   - the public key which you transfer to the server you wish to ssh to. You'll copy the contents of this 
+file over to each server you want to log into and append it to /home/your-login/.ssh/authorized_keys.
+
+Note that the '.ssh' folder will be hidden so run `ls -a` to see it.
+
+2. Copy the Public Key from the Workstation to the Server (repeat for all servers)
+
+`ssh-copy-id www.example.com` or `ssh-copy-id IP_Address`
+
+You will be prompted for the login password for the server and then the public key will install. 
+
+3. Connect to the Server from the Workstation
+
+`ssh [server_name(or IP)] 
+
+The first time you will prompted for the private key passphase you set above. Give this and then you should be logged in.
+
+4. Disable SSH password login
+
+Edit `/etc/ssh/sshd_config` and make these changes:
+
+ChallengeResponseAuthentication no
+PasswordAuthentication no
+UsePAM no
+
+5. Chenging the private key passphrase
+
+`ssh-keygen -p`
+It is very important to not leave off the -p as a new key pair will be generated, but you should be
+prompted before any overwrite occurs. You will be prompted for the old passphrase and the new one. This only affects
+the private key so your existing public keys will be unchanged and you can still connect to your servers without needing 
+to do anything.
+
+Alternative Instructions:
+
+1. Generate the ssh key pair on the desktop computer:
+ssh-keygen
+
+2. Copy the public key to the server:
+scp ~/.ssh/id_rsa.pub user@10.10.10.1:
+
+3. Connect to the server:
+ssh user@10.10.10.1
+
+4. Append the public key to authorized_keys and remove the uploaded copy:
+cat id_rsa.pub >> ~/.ssh/authorized_keys
+rm id_rsa.pub
+
+5. Edit the ssh server configuration to make sure that public key authentication is enabled (it should be enabled by default):
+sudo nano /etc/ssh/sshd_config
+
+5.1 These entries must be set to yes:
+RSAAuthentication yes
+PubkeyAuthentication yes
+
+6. Reload the configuration:
+sudo /etc/init.d/ssh reload
+
+7. Disconnect from the server:
+exit
+
+8. Try connecting without the need to give the password to the ssh-client:
+ssh user@10.10.10.1
+
+You might need to give a password now to access your private key file, but you should not need to give the password to the ssh program.
+
+9. Disable password authentication:
+sudo nano /etc/ssh/sshd_config
+
+9.1 The following settings should be set to no:
+ChallengeResponseAuthentication no
+PasswordAuthentication no
+UsePAM no
+
+9.2. Reload the configuration:
+sudo /etc/init.d/ssh reload
+
+10. Test that password authentication really is disabled:
+10.1 Disconnect from the server:
+exit
+
+10.2 Rename your private key file:
+mv ~/.ssh/id_rsa ~/.ssh/id_rsa.backup
+
+10.3 Try to reconnect to the server:
+ssh user@10.10.10.1
+
+This should produce a permission denied message: “Permission denied (publickey).”
+
+10.4 Restore your private key file:
+mv ~/.ssh/id_rsa.backup ~/.ssh/id_rsa
+

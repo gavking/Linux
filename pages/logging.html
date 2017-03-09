@@ -18,6 +18,51 @@
 
   <div class="col-sm-9">
 
+    ## Linux Log Files in CentOS  
+
+All standard log files are located in: /var/log/  
+
+We will list some of the standard system files below, but there are also process specific log files here e.g. 'yum.log' which receives messages
+related to software installs or 'httpd' which contains messages from configured websites. You should checkout /var/log/ on a CentOS/RHEL system
+to see all the available logs.
+
+**/var/log/boot.log**  
+Receives messages related to the boot process.
+
+**/var/log/messages**  
+This is the standard system log file and includes messages from all system software and any boot issues not related to the kernel.
+
+**/var/log/dmesg**  
+Receives messages from the kernel during system boot process, also about the hardware that is connected to the system including BIOS,
+CPU, any PCI devices ... etc. Can be used to monitor when a hotswappable devices such as USB stick is connected to the server. 
+
+**/var/log/secure**  
+Receives messages regarding system security e.g. system logins, users escalating to Root, mesages from TCP Wrappers which is used to prevent/allow access based on IP.
+Can be ued to investigate suspicious logins.
+
+**/var/log/audit/audit.log**   
+Receives messsages from the SELinux system. Contains AVC (access vector cache) messages that notify you when an SELinx policy check has
+been performed on a process. This may be useful if you suspect SELinux may be preventing something working. This file can be correlated 
+with the "secure" log file to investigate any attempted itrusions. 
+
+**var/log/firewalld**
+Receives messages from the firewall.
+
+**var/log/cron**
+Receive messages from the Cron job scheduling process
+
+## Monitoring log files in real time  
+
+`tail -f log_file` - will show the last entries in the log file and append any new messages in real time
+
+`dmesg` - outputs and controls messages from the dmesg log file
+
+`sealert` - monitoring and troubleshooting SELinux AVC events
+
+`aureport` - produces summary reports of audit logs - very useful high level reporting
+
+    
+    
     <hr>
     <h2>RSYSLOG</h2>
     <code>cat /etc/rsyslog.conf</code> Configuring the system log<br>
